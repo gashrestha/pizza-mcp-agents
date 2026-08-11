@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: pizza-api
+    runtime: node
+    rootDir: src/pizza-api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REGISTRATION_WEBAPP_URL
+        value: https://your-registration-webapp.vercel.app  # update after Vercel deploy
+      - key: AZURE_COSMOSDB_NOSQL_ENDPOINT
+        sync: false  # set manually in Render dashboard (optional)
+      - key: AZURE_STORAGE_URL
+        sync: false  # set manually in Render dashboard (optional)
+
+  - type: web
+    name: registration-api
+    runtime: node
+    rootDir: src/registration-api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AZURE_COSMOSDB_NOSQL_ENDPOINT
+        sync: false  # set manually in Render dashboard (optional)
+
+  - type: web
+    name: pizza-mcp
+    runtime: node
+    rootDir: src/pizza-mcp
+    buildCommand: npm install && npm run build
+    startCommand: node lib/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: PIZZA_API_URL
+        value: https://pizza-api.onrender.com  # update with your actual Render URL
