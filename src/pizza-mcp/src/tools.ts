@@ -15,7 +15,7 @@ export const tools = [
     schema: z.object({
       id: z.string().describe('ID of the pizza to retrieve'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { id: string }) => {
       return fetchPizzaApi(`/api/pizzas/${args.id}`);
     },
   },
@@ -25,7 +25,7 @@ export const tools = [
     schema: z.object({
       category: z.string().optional().describe('Category of toppings to filter by (can be empty)'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { category?: string }) => {
       return fetchPizzaApi(`/api/toppings?category=${args.category ?? ''}`);
     },
   },
@@ -35,14 +35,14 @@ export const tools = [
     schema: z.object({
       id: z.string().describe('ID of the topping to retrieve'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { id: string }) => {
       return fetchPizzaApi(`/api/toppings/${args.id}`);
     },
   },
   {
     name: 'get_topping_categories',
     description: 'Get a list of all topping categories',
-    handler: async (_args: z.ZodRawShape) => {
+    handler: async () => {
       return fetchPizzaApi('/api/toppings/categories');
     },
   },
@@ -70,7 +70,7 @@ export const tools = [
     schema: z.object({
       id: z.string().describe('ID of the order to retrieve'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { id: string }) => {
       return fetchPizzaApi(`/api/orders/${args.id}`);
     },
   },
@@ -91,7 +91,7 @@ export const tools = [
         .nonempty()
         .describe('List of items in the order'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { userId: string; nickname?: string; items: { pizzaId: string; quantity: number; extraToppingIds?: string[] }[] }) => {
       return fetchPizzaApi('/api/orders', {
         method: 'POST',
         body: JSON.stringify(args),
@@ -105,7 +105,7 @@ export const tools = [
       id: z.string().describe('ID of the order to cancel'),
       userId: z.string().describe('ID of the user that placed the order'),
     }),
-    handler: async (args: z.ZodRawShape) => {
+    handler: async (args: { id: string; userId: string }) => {
       return fetchPizzaApi(`/api/orders/${args.id}?userId=${args.userId}`, {
         method: 'DELETE',
       });

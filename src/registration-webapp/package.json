@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "swa start",
+    "start": "vite --host --port 4280",
     "serve": "concurrently npm:serve:* --raw --kill-others",
     "serve:api": "cd ../registration-api && npm start",
     "serve:webapp": "npm run dev -s",
